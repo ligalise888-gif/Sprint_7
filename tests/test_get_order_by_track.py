@@ -2,7 +2,7 @@ import requests
 import allure
 
 from urls import Urls
-from data import OrderData, Messages
+from data import Messages
 
 
 class TestGetOrderByTrack:

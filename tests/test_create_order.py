@@ -8,7 +8,7 @@ from data import OrderData
 
 class TestCreateOrder:
 
-    @allure.title('Создание заказа с разными вариантами цвета возвращает track')
+    @allure.title('Создание заказа с разными вариантами цвета возвращает код 201 и track')
     @allure.description('Проверяем цвета: BLACK, GREY, оба, без цвета')
     @pytest.mark.parametrize('color', OrderData.COLORS)
     def test_create_order_with_different_colors_returns_track(self, color):

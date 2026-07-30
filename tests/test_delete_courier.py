@@ -3,18 +3,13 @@ import allure
 
 from urls import Urls
 from data import Messages
-from helpers import register_new_courier_and_return_login_password, get_courier_id
 
 
 class TestDeleteCourier:
 
     @allure.title('Успешное удаление курьера возвращает код 200 и тело ok:true')
-    def test_delete_courier_valid_id_returns_200_and_ok_true(self):
-        login_pass = register_new_courier_and_return_login_password()
-        login, password = login_pass[0], login_pass[1]
-        courier_id = get_courier_id(login, password)
-
-        response = requests.delete(Urls.DELETE_COURIER + str(courier_id))
+    def test_delete_courier_valid_id_returns_200_and_ok_true(self, create_courier):
+        response = requests.delete(Urls.DELETE_COURIER + str(create_courier["id"]))
 
         assert response.status_code == 200
         assert response.json() == {"ok": True}

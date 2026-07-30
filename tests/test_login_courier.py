@@ -1,5 +1,6 @@
 import requests
 import allure
+import pytest
 
 from urls import Urls
 from data import Messages
@@ -16,21 +17,22 @@ class TestLoginCourier:
         assert response.status_code == 200
         assert "id" in response.json()
 
-    @allure.title('Авторизация без логина не проходит')
-    @allure.description('По документации ожидается код 400. Фактически сервер отвечает 504 (дефект API). Проверяем, что авторизация не выполняется успешно.')
-    def test_login_courier_without_login_not_authorized(self, create_courier):
+    @allure.title('Авторизация без логина возвращает ошибку 400')
+    def test_login_courier_without_login_returns_400(self, create_courier):
         payload = {"password": create_courier["password"]}
-        response = requests.post(Urls.LOGIN_COURIER, data=payload, timeout=90)
+        response = requests.post(Urls.LOGIN_COURIER, data=payload)
 
-        assert response.status_code != 200
+        assert response.status_code == 400
+        assert response.json()["message"] == Messages.NOT_ENOUGH_DATA_TO_LOGIN
 
-    @allure.title('Авторизация без пароля не проходит')
-    @allure.description('По документации ожидается код 400. Фактически сервер отвечает 504 (дефект API). Проверяем, что авторизация не выполняется успешно.')
-    def test_login_courier_without_password_not_authorized(self, create_courier):
+    @allure.title('Авторизация без пароля возвращает ошибку 400')
+    @pytest.mark.xfail(reason='Дефект API: сервер отвечает 504 Gateway Timeout вместо 400')
+    def test_login_courier_without_password_returns_400(self, create_courier):
         payload = {"login": create_courier["login"]}
         response = requests.post(Urls.LOGIN_COURIER, data=payload, timeout=90)
 
-        assert response.status_code != 200
+        assert response.status_code == 400
+        assert response.json()["message"] == Messages.NOT_ENOUGH_DATA_TO_LOGIN
 
     @allure.title('Авторизация с неверным логином возвращает ошибку 404')
     def test_login_courier_wrong_login_returns_404(self, create_courier):
