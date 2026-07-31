@@ -3,7 +3,7 @@ import allure
 
 from urls import Urls
 from data import Messages
-from helpers import get_first_order_id
+from api_methods import get_first_order_id
 
 
 class TestAcceptOrder:

@@ -3,7 +3,7 @@ import requests
 
 from urls import Urls
 from data import OrderData
-from helpers import register_new_courier_and_return_login_password, get_courier_id
+from api_methods import register_new_courier_and_return_login_password, get_courier_id
 
 
 @pytest.fixture
